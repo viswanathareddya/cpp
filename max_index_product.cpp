@@ -109,4 +109,47 @@ vector<string> split_string(string input_string) {
     return splits;
 }
 /*optimized*/
+#include <bits/stdc++.h>
 
+using namespace std;
+
+int main()
+{
+    int n;  cin>>n;
+    vector<int> a(n), left(n) , right(n);
+    stack<int> Stack;
+
+    for(auto &i:a) cin>>i;
+    /*
+    left array contains index of previous nearest greatest element
+    right array contains index of next greatest element
+    */
+    for(int i=0 ; i<n ; i++)
+    {
+        while(not Stack.empty() and a[Stack.top()] <= a[i])
+            Stack.pop();
+        if(not Stack.empty())
+            left[i] = Stack.top() + 1;
+        Stack.push(i);
+    }
+
+    /* just to make stack clear */
+    while(not Stack.empty())    Stack.pop();
+
+    for(int i=n-1 ; i>=0 ; i--)
+    {
+        while(not Stack.empty() and a[Stack.top()] <= a[i])
+            Stack.pop();
+        if(not Stack.empty())
+            right[i] = Stack.top() + 1;
+        Stack.push(i);
+    }
+
+    long long ans = 0;
+
+    for(int i=0 ; i<n ; i++)
+    {
+        ans = max(ans ,(long long)left[i] * right[i]);
+    }
+    cout<<ans;
+}
